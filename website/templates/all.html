@@ -1,0 +1,28 @@
+{% extends "base.html" %} {% block title %}Products{% endblock %} {% block content
+%}
+<h3>Products</h3>
+<div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+  {% for product in products.items %}
+
+
+  <div class="card" style="width: 18rem;">
+    <img class="card-img-top img-fluid" src="/static/assets/{{product.photo}}" alt="Card image cap">
+    <div class="card-body">
+      <h5 class="card-title">{{ product.name }}</h5>
+      <p class="card-text">{{ product.description }}</p>
+      <a href="#" class="btn btn-primary">Go somewhere</a>
+    </div>
+  </div>
+
+{%endfor%}
+</div>
+    <div class="p-1 text-center">
+    {% for page_num in products.iter_pages() %}
+        {% if page_num %}
+            <a class="btn btn-outline-success" href="{{ url_for('views.all', page=page_num) }}">{{ page_num }}</a>
+            {% else %}
+            ...
+        {% endif %}
+    {% endfor %}
+    </div>
+{% endblock %}

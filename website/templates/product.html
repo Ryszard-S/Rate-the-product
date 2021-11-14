@@ -1,0 +1,98 @@
+{% extends "base.html" %} {% block title %}Products{% endblock %} {% block content %}
+
+    <div class="container d-flex justify-content-center p-2">
+        <div class="card " style="width: 22rem;">
+            <div class="card-header">{{ product[7] }}, {{ product[1] }}</div>
+            <img src="/static/assets/{{ product[4] }}" class="card-img-top">
+            <div class="card-body">
+                <p>Ocena: </p>
+                <p class="card-text">{{ product[2] }}</p>
+            </div>
+
+            <div class="card-body">
+                <p>Opis:</p>
+                <p>{{ product[5] }}</p>
+            </div>
+            <div class="card-footer">
+                <p>Data dodania: {{ product[3] }}</p>
+                <p>Kod kreskowy: {{ product[6] }}</p>
+            </div>
+        </div>
+        <br>
+
+
+    </div>
+    {% if user.is_authenticated and comment_added == False %}
+
+        <form class="p-2 border border-success" method="post" style="max-width:680px; margin:auto;">
+            <div class="d-flex justify-content-between">
+                <div>0</div>
+                <div>0,5</div>
+                <div>1,0</div>
+                <div>1,5</div>
+                <div>2,0</div>
+                <div>2,5</div>
+                <div>3,0</div>
+                <div>3,5</div>
+                <div>4,0</div>
+                <div>4,5</div>
+                <div>5,0</div>
+            </div>
+
+            <input type="range" class="form-range" min="0" max="5" step="0.5" id="customRange3" name="stars">
+            <div class="form-floating">
+
+                <textarea
+                        type="text"
+                        class="form-control"
+                        id="comment"
+                        name="comment"
+                        placeholder="Komentarz"></textarea>
+                <div class="d-flex">
+                    <label for="comment">Komentarz</label>
+                    <button type="submit" class="btn btn-success ms-auto">Dodaj komentarz</button>
+                </div>
+
+            </div>
+        </form>
+
+    {% else %}
+        <div class="p-2 border border-danger" style="max-width:680px; margin:auto;">
+
+                <textarea
+                        type="text"
+                        class="form-control"
+                        id="comment"
+                        name="comment"
+                        placeholder="Komentarz"></textarea>
+            <div class="d-flex">
+                <label for="comment">Komentarz</label>
+
+                <button type="submit" class="btn btn-danger ms-auto" disabled>Dodaj komentarz</button>
+            </div>
+        </div>
+    {% endif %}
+    <div class="container">
+        {% for comment in comments %}
+            <div class="p-3">
+                <div class="card ">
+                    <div class="card-header">{{ comment[1] }}
+                        <p class="card-text">{{ comment[3] }} </p>
+                            {% if user.is_authenticated and user.get_id() == str(comment[6]) %}
+                                <a href=/delete/{{ comment[5] }}/{{ comment[6] }}/{{ product[8] }}>
+                        <button class="btn btn-warning" type="button" name="del" id = "delete" >Usuń komentarz</button>
+                        </a>
+                            {% endif %}
+
+
+                    </div>
+                    <div class="card-body">{{ comment[2] }}</div>
+                    <div class="card-footer">{{ comment[4] }}</div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+{% endblock %}
+
+Ocena: {{ product[2] }}

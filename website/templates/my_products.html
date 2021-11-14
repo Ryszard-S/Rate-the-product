@@ -1,0 +1,18 @@
+{% extends "base.html" %} {% block title %}Products{% endblock %} {% block content %}
+    <h3>Products</h3>
+    <div class="row  justify-content-center">
+        {% for product in products.items %}
+            <div class="card">
+                <div class="card-header">
+                    Brand
+                    {{ product[3] }}
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ product[1] }}</h5>
+                    <p class="card-text">{{ product[2] }}</p>
+                </div>
+            </div>
+
+        {% endfor %}
+    </div>
+{% endblock %}

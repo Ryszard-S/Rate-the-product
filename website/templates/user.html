@@ -1,0 +1,29 @@
+{% extends "base.html" %} {% block title %}Products{% endblock %} {% block content %}
+
+
+    <table class="table">
+        <thead>
+        <tr>
+
+            <th scope="col">Imię</th>
+            <th scope="col">Nick</th>
+            <th scope="col">Email</th>
+            <th scope="col">Data rejestracji</th>
+            <th scope="col">Jesteś już nami od:</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+{#            <th scope="row"></th>#}
+            <td>{{ info.name }}</td>
+            <td>{{ info.nick }}</td>
+            <td>{{ info.email }}</td>
+            <td>{{ info.data_rejestracji }}</td>
+            <td>{{ czas }} dni</td>
+        </tr>
+        </tbody>
+    </table>
+
+
+
+{% endblock %}
