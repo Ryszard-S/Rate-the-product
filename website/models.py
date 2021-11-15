@@ -18,7 +18,7 @@ class Login(db.Model, UserMixin):
 class Products(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
-    brand = db.Column(db.Integer, db.ForeignKey('brand.id'))
+    id_brand = db.Column(db.Integer, db.ForeignKey('brand.id'))
     description = db.Column(db.Text, nullable=False)
     photo = db.Column(db.String(200), nullable=False, default='default.png')
     id_user = db.Column(db.Integer, db.ForeignKey('login.id'))

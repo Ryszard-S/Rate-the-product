@@ -23,12 +23,12 @@ def home():
 def my_products():
     page = request.args.get('page', 1, type=int)
     prod = Products.query.filter_by(id_user=current_user.get_id()).paginate(page=page, per_page=12)
-    prodd = Products.query.filter_by(id_user=current_user.get_id()).join(Brand, Products.brand == Brand.id).add_columns(
+    prodd = Products.query.filter_by(id_user=current_user.get_id()).join(Brand, Products.id_brand == Brand.id).add_columns(
         Products.name, Products.description,
         Brand.name).paginate(page=page,
                              per_page=12)
-    proddd = Products.query.join(Brand, Products.brand == Brand.id).add_columns(Products.name, Products.description,
-                                                                                Brand.name)
+    proddd = Products.query.join(Brand, Products.id_brand == Brand.id).add_columns(Products.name, Products.description,
+                                                                                   Brand.name)
 
 
     return render_template("my_products.html", user=current_user, products=prodd, page=page)
@@ -61,7 +61,7 @@ def upload():
                 name = str(uuid.uuid4())
                 filename = name + "." + ext
                 image.save(os.path.join(current_app.config['IMAGE_UPLOADS'], filename))
-                product = Products(name=name_product, brand=brand, description=description, photo=filename,
+                product = Products(name=name_product, id_brand=brand, description=description, photo=filename,
                                    barcode=barcode, id_user=current_user.get_id())
                 db.session.add(product)
                 db.session.commit()
@@ -77,32 +77,32 @@ def search():
     per_page = request.args.get('per_page', 12, type=int)
 
     if q:
-        product = Products.query.join(Brand, Products.brand == Brand.id).add_columns(Brand.name, Products.name,
-                                                                                     Products.photo,
-                                                                                     Products.id,
-                                                                                     Products.rating).filter(
+        product = Products.query.join(Brand, Products.id_brand == Brand.id).add_columns(Brand.name, Products.name,
+                                                                                        Products.photo,
+                                                                                        Products.id,
+                                                                                        Products.rating).filter(
             Products.name.contains(q)).paginate(
             page=page, per_page=per_page)
     else:
 
-        product = Products.query.join(Brand, Products.brand == Brand.id).add_columns(Brand.name, Products.name,
-                                                                                     Products.photo,
-                                                                                     Products.id,
-                                                                                     Products.rating).paginate(
+        product = Products.query.join(Brand, Products.id_brand == Brand.id).add_columns(Brand.name, Products.name,
+                                                                                        Products.photo,
+                                                                                        Products.id,
+                                                                                        Products.rating).paginate(
             page=page, per_page=per_page)
     return render_template("search.html", products=product, user=current_user, page=page, q=q, per_page=per_page)
 
 
 @views.route('/product/<int:id_product>', methods=["GET", "POST"])
 def product(id_product):
-    product = Products.query.filter_by(id=id_product).join(Brand, Products.brand == Brand.id).add_columns(Products.name,
-                                                                                                          Products.rating,
-                                                                                                          Products.date,
-                                                                                                          Products.photo,
-                                                                                                          Products.description,
-                                                                                                          Products.barcode,
-                                                                                                          Brand.name,
-                                                                                                          Products.id).first_or_404()
+    product = Products.query.filter_by(id=id_product).join(Brand, Products.id_brand == Brand.id).add_columns(Products.name,
+                                                                                                             Products.rating,
+                                                                                                             Products.date,
+                                                                                                             Products.photo,
+                                                                                                             Products.description,
+                                                                                                             Products.barcode,
+                                                                                                             Brand.name,
+                                                                                                             Products.id).first_or_404()
 
     comments = Comments.query.filter_by(id_product=id_product).join(Login, Comments.id_user == Login.id).add_columns(
         Login.nick,
