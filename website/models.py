@@ -23,7 +23,7 @@ class Products(db.Model):
     photo = db.Column(db.String(200), nullable=False, default='default.png')
     id_user = db.Column(db.Integer, db.ForeignKey('login.id'))
     barcode = db.Column(db.String(80), nullable=False)
-    date = db.Column(db.DateTime())
+    date = db.Column(db.DateTime(timezone=True), nullable=True, default=func.now())
     rating = db.Column(db.Float)
 
 

@@ -12,14 +12,6 @@ from .models import Products, Brand, Comments, Login
 views = Blueprint('views', __name__)
 
 
-@views.route('/test', methods=['GET', 'POST'])
-def test():
-    napis = request.args.get('select')
-    if request.method == 'POST':
-        ile = request.form.get('stars')
-        print(napis, ile)
-    return render_template("test.html", user=current_user, select=napis)
-
 
 @views.route('/', methods=['GET', 'POST'])
 def home():
@@ -30,7 +22,6 @@ def home():
 @login_required
 def my_products():
     page = request.args.get('page', 1, type=int)
-    print(current_user.get_id())
     prod = Products.query.filter_by(id_user=current_user.get_id()).paginate(page=page, per_page=12)
     prodd = Products.query.filter_by(id_user=current_user.get_id()).join(Brand, Products.brand == Brand.id).add_columns(
         Products.name, Products.description,
@@ -38,9 +29,7 @@ def my_products():
                              per_page=12)
     proddd = Products.query.join(Brand, Products.brand == Brand.id).add_columns(Products.name, Products.description,
                                                                                 Brand.name)
-    print(proddd)
-    for i in proddd:
-        print(i[2])
+
 
     return render_template("my_products.html", user=current_user, products=prodd, page=page)
 
@@ -49,19 +38,9 @@ def my_products():
 @login_required
 def upload():
     brands = Brand.query.all()
-    for i in brands:
-        print(i.name)
-
     if request.method == 'POST':
         if 'image' not in request.files:
             flash('No file part')
-        print(request.method)
-        # image = request.files['image']
-        name_product = request.form.get('name')
-        brand = request.form.get('brand')
-        description = request.form.get('description')
-        barcode = request.form.get('barcode')
-        print( name_product, brand, barcode, description)
         if request.files:
             image = request.files['image']
             name_product = request.form.get('name')
@@ -73,7 +52,6 @@ def upload():
                 return redirect(request.url)
 
             if not allowed_file(image.filename):
-                print("Image not allowed")
                 flash("Bad filename extencions!", 'error')
                 return redirect(request.url)
 
@@ -112,7 +90,6 @@ def search():
                                                                                      Products.id,
                                                                                      Products.rating).paginate(
             page=page, per_page=per_page)
-    print(current_user)
     return render_template("search.html", products=product, user=current_user, page=page, q=q, per_page=per_page)
 
 

@@ -14,7 +14,6 @@ def login():
         password = request.form.get('password1')
 
         user = Login.query.filter_by(email=email).first()
-        # print(user.id, user.get_id(),"from database" ,user.password,"from: ",password)
         if user:
             if check_password_hash(user.password, password):
                 flash('Logged in successfully!', category='success')
@@ -44,7 +43,6 @@ def signup():
         passw1 = request.form.get("password1")
         passw2 = request.form.get("password2")
         data = request.form
-        print(data)
 
         if len(email) < 4:
             flash("Email must be grater than 3 characters.", category='error')
@@ -57,7 +55,6 @@ def signup():
         else:
             # add user to database
             passwd = generate_password_hash(passw1, method="sha256")
-            print(passwd)
             new_user = Login(email=email, name=firstName, nick=nick, password=passwd)
             db.session.add(new_user)
             db.session.commit()
