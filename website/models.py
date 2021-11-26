@@ -25,6 +25,7 @@ class Products(db.Model):
     barcode = db.Column(db.String(80), nullable=False)
     date = db.Column(db.DateTime(timezone=True), nullable=True, default=func.now())
     rating = db.Column(db.Float)
+    website = db.Column(db.BOOLEAN)
 
 
 class Brand(db.Model):

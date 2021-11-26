@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app
+from flask import Blueprint, render_template, request, flash, redirect, url_for
 from .models import Login
 from werkzeug.security import generate_password_hash, check_password_hash
 from .extenctions import db
@@ -39,14 +39,14 @@ def signup():
     if request.method == "POST":
         email = request.form.get('email')
         nick = request.form.get('nick')
-        firstName = request.form.get("firstName")
+        first_name = request.form.get("firstName")
         passw1 = request.form.get("password1")
         passw2 = request.form.get("password2")
         data = request.form
 
         if len(email) < 4:
             flash("Email must be grater than 3 characters.", category='error')
-        elif len(firstName) < 2:
+        elif len(first_name) < 2:
             flash("Email must be grater than 1 characters.", category='error')
         elif passw1 != passw2:
             flash("Passwords don\'t match.", category='error')
@@ -55,7 +55,7 @@ def signup():
         else:
             # add user to database
             passwd = generate_password_hash(passw1, method="sha256")
-            new_user = Login(email=email, name=firstName, nick=nick, password=passwd)
+            new_user = Login(email=email, name=first_name, nick=nick, password=passwd)
             db.session.add(new_user)
             db.session.commit()
             login_user(new_user, remember=True)

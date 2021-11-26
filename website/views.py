@@ -1,5 +1,6 @@
 import os
 import uuid
+from random import choice
 
 from flask import Blueprint, render_template, request, flash, redirect, current_app, url_for
 from flask_login import current_user, login_required
@@ -12,7 +13,6 @@ from .models import Products, Brand, Comments, Login
 views = Blueprint('views', __name__)
 
 
-
 @views.route('/', methods=['GET', 'POST'])
 def home():
     return render_template("home.html", user=current_user)
@@ -23,13 +23,13 @@ def home():
 def my_products():
     page = request.args.get('page', 1, type=int)
     prod = Products.query.filter_by(id_user=current_user.get_id()).paginate(page=page, per_page=12)
-    prodd = Products.query.filter_by(id_user=current_user.get_id()).join(Brand, Products.id_brand == Brand.id).add_columns(
+    prodd = Products.query.filter_by(id_user=current_user.get_id()).join(Brand,
+                                                                         Products.id_brand == Brand.id).add_columns(
         Products.name, Products.description,
         Brand.name).paginate(page=page,
                              per_page=12)
     proddd = Products.query.join(Brand, Products.id_brand == Brand.id).add_columns(Products.name, Products.description,
                                                                                    Brand.name)
-
 
     return render_template("my_products.html", user=current_user, products=prodd, page=page)
 
@@ -39,6 +39,31 @@ def my_products():
 def upload():
     brands = Brand.query.all()
     if request.method == 'POST':
+        option = request.form.get('flexRadioDefault')
+        name_product = request.form.get('name')
+        brand = request.form.get('brand')
+        description = request.form.get('description')
+        barcode = request.form.get('barcode')
+
+        if option == 'random':
+            filename = choice(current_app.config['IMAGES'])
+            product = Products(name=name_product, id_brand=brand, description=description, photo=filename,
+                               barcode=barcode, id_user=current_user.get_id(), website=False)
+            db.session.add(product)
+            db.session.commit()
+            flash("Product added", 'message')
+
+        elif option == 'www':
+            link = request.form.get('link')
+            if allowed_file(link):
+                product = Products(name=name_product, id_brand=brand, description=description, photo=link,
+                                   barcode=barcode, id_user=current_user.get_id(), website=True)
+                db.session.add(product)
+                db.session.commit()
+                flash("Product added", 'message')
+            else:
+                flash("niepoprawny link", 'error')
+
         if 'image' not in request.files:
             flash('No file part')
         if request.files:
@@ -77,32 +102,38 @@ def search():
     per_page = request.args.get('per_page', 12, type=int)
 
     if q:
-        product = Products.query.join(Brand, Products.id_brand == Brand.id).add_columns(Brand.name, Products.name,
+        product = Products.query.join(Brand, Products.id_brand == Brand.id).add_columns(Brand.name,
+                                                                                        Products.name,
                                                                                         Products.photo,
                                                                                         Products.id,
-                                                                                        Products.rating).filter(
+                                                                                        Products.rating,
+                                                                                        Products.website).filter(
             Products.name.contains(q)).paginate(
             page=page, per_page=per_page)
     else:
 
-        product = Products.query.join(Brand, Products.id_brand == Brand.id).add_columns(Brand.name, Products.name,
+        product = Products.query.join(Brand, Products.id_brand == Brand.id).add_columns(Brand.name,
+                                                                                        Products.name,
                                                                                         Products.photo,
                                                                                         Products.id,
-                                                                                        Products.rating).paginate(
+                                                                                        Products.rating,
+                                                                                        Products.website).paginate(
             page=page, per_page=per_page)
     return render_template("search.html", products=product, user=current_user, page=page, q=q, per_page=per_page)
 
 
 @views.route('/product/<int:id_product>', methods=["GET", "POST"])
 def product(id_product):
-    product = Products.query.filter_by(id=id_product).join(Brand, Products.id_brand == Brand.id).add_columns(Products.name,
-                                                                                                             Products.rating,
-                                                                                                             Products.date,
-                                                                                                             Products.photo,
-                                                                                                             Products.description,
-                                                                                                             Products.barcode,
-                                                                                                             Brand.name,
-                                                                                                             Products.id).first_or_404()
+    product = Products.query.filter_by(id=id_product).join(Brand, Products.id_brand == Brand.id).add_columns(
+        Products.name,
+        Products.rating,
+        Products.date,
+        Products.photo,
+        Products.description,
+        Products.barcode,
+        Brand.name,
+        Products.id,
+        Products.website).first_or_404()
 
     comments = Comments.query.filter_by(id_product=id_product).join(Login, Comments.id_user == Login.id).add_columns(
         Login.nick,
@@ -158,7 +189,7 @@ def allowed_file(filename):
     if not '.' in filename:
         return False
 
-    ext = filename.rsplit('.', 1)[1]
+    ext = filename.rsplit('.')[-1]
 
     if ext.upper() in current_app.config['ALLOWED_FILE_EXTENTIONS']:
         return True

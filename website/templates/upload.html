@@ -22,7 +22,8 @@
 
             <label for="brand">Producent</label>
 
-            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" id="brand" name="brand">
+            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" id="brand"
+                    name="brand">
                 <option selected></option>
                 {% for brand in brands %}
                     <option value="{{ brand.id }}">{{ brand.name }}</option>
@@ -56,16 +57,28 @@
             <label for="name">kod kreskowy</label>
         </div>
 
-        <div class="form-floating p-3">
+        <div class="form-floating p-2">
 
-            <div class="input-group mb-3">
-                <input type="file" class="form-control" id="image" name="image" draggable="true" accept="image/jpeg, image/png, image/jpg">
-
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"
+                       value="random" checked>
+                <label class="form-check-label" for="flexRadioDefault1">
+                    Losuj obrazek
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" value="www">
+                <label class="form-check-label" for="flexRadioDefault2">
+                    Link do zdjęcia z internetu
+                </label>
+                <input class="form-control" type="text" placeholder="www" aria-label="default input example" name="link" id="name">
             </div>
 
         </div>
-    <button class="btn btn-primary" type="submit">Upload</button>
-    <button class="btn btn-primary" type="reset">Reset</button>
+        <div class="d-flex justify-content-around">
+            <button class="btn btn-primary" type="submit">Upload</button>
+            <button class="btn btn-primary" type="reset">Reset</button>
+        </div>
     </form>
 
 

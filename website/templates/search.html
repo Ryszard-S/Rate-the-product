@@ -4,7 +4,13 @@
 
         {% for product in products.items %}
             <div class="card" style="width: 18rem;">
-                <img class="card-img-top img-fluid" src="/static/assets/{{ product[3] }}" alt="Card image cap">
+
+                {% if product[6] %}
+
+                    <img class="card-img-top img-fluid" src="{{ product[3] }}" alt="Card image cap">
+                {% else %}
+                    <img class="card-img-top img-fluid" src="/static/assets/{{ product[3] }}" alt="Card image cap">
+                {% endif %}
                 <div class="card-body">
                     <div class="d-flex justify-content-center small text-warning mb-2">
 
@@ -41,6 +47,6 @@
             <button type="submit">Sub</button>
         </form>
     </div>
-    <script src="{{url_for('static', filename='main.js')}}"></script>
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
 {% endblock %}
 

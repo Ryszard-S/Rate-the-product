@@ -3,7 +3,12 @@
     <div class="container d-flex justify-content-center p-2">
         <div class="card " style="width: 22rem;">
             <div class="card-header">{{ product[7] }}, {{ product[1] }}</div>
-            <img src="/static/assets/{{ product[4] }}" class="card-img-top">
+            {% if product[9] %}
+
+                <img class="card-img-top img-fluid" src="{{ product[4] }}" alt="Card image cap">
+            {% else %}
+                <img class="card-img-top img-fluid" src="/static/assets/{{ product[4] }}" alt="Card image cap">
+            {% endif %}
             <div class="card-body">
                 <p>Ocena: </p>
                 <p class="card-text">{{ product[2] }}</p>
@@ -78,11 +83,12 @@
                 <div class="card ">
                     <div class="card-header">{{ comment[1] }}
                         <p class="card-text">{{ comment[3] }} </p>
-                            {% if user.is_authenticated and user.get_id() == str(comment[6]) %}
-                                <a href=/delete/{{ comment[5] }}/{{ comment[6] }}/{{ product[8] }}>
-                        <button class="btn btn-warning" type="button" name="del" id = "delete" >Usuń komentarz</button>
-                        </a>
-                            {% endif %}
+                        {% if user.is_authenticated and user.get_id() == str(comment[6]) %}
+                            <a href=/delete/{{ comment[5] }}/{{ comment[6] }}/{{ product[8] }}>
+                                <button class="btn btn-warning" type="button" name="del" id="delete">Usuń komentarz
+                                </button>
+                            </a>
+                        {% endif %}
 
 
                     </div>
