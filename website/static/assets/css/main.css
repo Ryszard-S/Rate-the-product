@@ -1,0 +1,35 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  font-family: IBM plex mono, monospace; }
+
+.navbar {
+  display: flex;
+  margin: 5px; }
+  .navbar a {
+    white-space: nowrap; }
+    .navbar a:visited {
+      color: black; }
+    .navbar a:link {
+      text-decoration: none;
+      color: black; }
+  .navbar .navbar-brand {
+    font-family: Nova Flat;
+    font-size: 30px;
+    white-space: nowrap; }
+  .navbar .nav-item {
+    margin: 7px; }
+    .navbar .nav-item:hover {
+      font-weight: 500;
+      border-bottom: solid 2px #FFEA01; }
+    .navbar .nav-item .input-group {
+      margin: 7px; }
+  .navbar .container-fluid {
+    display: flex;
+    width: 100%;
+    height: inherit; }
+    .navbar .container-fluid > * {
+      display: flex;
+      align-items: center; }
+    .navbar .container-fluid > .float-left {
+      margin-left: auto; }
