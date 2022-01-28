@@ -1,0 +1,35 @@
+@import "config";
+
+.search-results {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 20px;
+  grid-auto-rows: minmax(100px, auto);
+  justify-items: center;
+  @media (max-width: 576px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid blue;
+  width: 200px;
+  height: 300px;
+  box-shadow: $shadow_violet;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px;
+
+  .card-img {
+    max-height: 150px;
+    object-fit: scale-down;
+  }
+
+  .card-body {
+    justify-self: flex-end;
+  }
+}

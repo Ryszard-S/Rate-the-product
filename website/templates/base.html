@@ -13,7 +13,7 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/main.css') }}">
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 
-
+    {% block stylesheet %}{% endblock %}
     <title>{% block title %}Home{% endblock %}</title>
 </head>
 
@@ -21,7 +21,7 @@
 <nav class="navbar">
     <div class="container-fluid">
         <a class="navbar-brand" href="/">
-            <img src="/static/assets/img/Logo_rtp.svg"  alt="logo"/>
+            <img src="/static/assets/img/Logo_rtp.svg" alt="logo"/>
             Rate the Product</a>
         <div class="float-left" id="navbarNavAltMarkup">
             <div class="navbar-nav">
@@ -43,10 +43,8 @@
                 {% endif %}
             </div>
             <form action="/search" class="search">
-                <div class="input-group">
-                    <input class="form-control" type="search" placeholder="Search" aria-label="Search" name="q">
-                    <button class="btn btn-outline-success" type="submit"><i class="bi bi-search"></i> Search</button>
-                </div>
+                <input class="form-control" type="search" placeholder="Search" aria-label="Search" name="query">
+                <button class="btn btn-outline-success" type="submit"><i class="bi bi-search"></i></button>
             </form>
         </div>
     </div>

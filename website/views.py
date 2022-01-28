@@ -95,20 +95,20 @@ def upload():
     return render_template("upload.html", user=current_user, brands=brands)
 
 
-@views.route("/search", methods=['GET', 'POST'])
+@views.route("/search", methods=['GET'])
 def search():
-    q = request.args.get('q')
+    query = request.args.get('query')
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 12, type=int)
 
-    if q:
+    if query:
         product = Products.query.join(Brand, Products.id_brand == Brand.id).add_columns(Brand.name,
                                                                                         Products.name,
                                                                                         Products.photo,
                                                                                         Products.id,
                                                                                         Products.rating,
                                                                                         Products.website).filter(
-            Products.name.contains(q)).paginate(
+            Products.name.contains(query)).paginate(
             page=page, per_page=per_page)
     else:
 
@@ -119,7 +119,7 @@ def search():
                                                                                         Products.rating,
                                                                                         Products.website).paginate(
             page=page, per_page=per_page)
-    return render_template("search.html", products=product, user=current_user, page=page, q=q, per_page=per_page)
+    return render_template("search.html", products=product, user=current_user, page=page, query=query, per_page=per_page)
 
 
 @views.route('/product/<int:id_product>', methods=["GET", "POST"])

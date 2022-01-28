@@ -1,21 +1,22 @@
-{% extends "base.html" %} {% block title %}Products{% endblock %} {% block content %}
+{% extends "base.html" %}
+{% block stylesheet %}
+    <link rel="stylesheet" type="text/css"
+          href="{{ url_for('static', filename='assets/css/search.css') }}"> {% endblock %}
+{% block title %}Products{% endblock %}
+{% block content %}
     <h3>Products</h3>
-    <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
 
+    <div class="search-results">
         {% for product in products.items %}
-            <div class="card" style="width: 18rem;">
+            <div class="card">
 
                 {% if product[6] %}
 
-                    <img class="card-img-top img-fluid" src="{{ product[3] }}" alt="Card image cap">
+                    <img class="card-img" src="{{ product[3] }}" alt="Card image cap">
                 {% else %}
-                    <img class="card-img-top img-fluid" src="/static/assets/img/product_photo/{{ product[3] }}" alt="Card image cap">
+                    <img class="card-img" src="/static/assets/img/product_photo/{{ product[3] }}" alt="Card image cap">
                 {% endif %}
                 <div class="card-body">
-                    <div class="d-flex justify-content-center small text-warning mb-2">
-
-
-                    </div>
                     <h5 class="card-title">{{ product[1] }}, {{ product[2] }}</h5>
                     <p class="card-text">{{ product[5] }}</p>
                     <a href="{{ url_for('views.product',id_product=product[4]) }}" class="btn btn-outline-secondary">Pokaż
