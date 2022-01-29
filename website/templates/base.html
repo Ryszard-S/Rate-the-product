@@ -12,6 +12,7 @@
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/main.css') }}">
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <script defer src="{{ url_for('static', filename='assets/js/toggleBurger.js') }}"></script>
 
     {% block stylesheet %}{% endblock %}
     <title>{% block title %}Home{% endblock %}</title>
@@ -24,12 +25,14 @@
             <img src="/static/assets/img/Logo_rtp.svg" alt="logo"/>
             Rate the Product</a>
         <div class="float-left" id="navbarNavAltMarkup">
+            <div class="toggle-navbar"><i class="bi bi-list"></i></div>
             <div class="navbar-nav">
+
                 <a class="nav-item" id="all" href="/my_products"><i class="bi bi-eye"> </i> My products</a>
 
                 {% if user.is_authenticated %}
-                    <a class="nav-item" id="add_product" href="/upload"><i class="bi bi-file-earmark-plus"></i>
-                        Add product</a>
+                    <div><a class="nav-item" id="add_product" href="/upload"><i class="bi bi-file-earmark-plus"></i>
+                        Add product</a></div>
 
                     <a class="nav-item" id="logout" href="/logout"><i class="bi bi-box-arrow-in-left"> </i>
                         Logout</a>
@@ -41,11 +44,12 @@
                     <a class="nav-item" id="signUp" href="/sign-up"><i
                             class="bi bi-box-arrow-in-down-right"></i> Sign Up</a>
                 {% endif %}
+
+                <form action="/search" class="search">
+                    <input class="form-control" type="search" placeholder="Search" aria-label="Search" name="query">
+                    <button class="btn btn-outline-success" type="submit"><i class="bi bi-search"></i></button>
+                </form>
             </div>
-            <form action="/search" class="search">
-                <input class="form-control" type="search" placeholder="Search" aria-label="Search" name="query">
-                <button class="btn btn-outline-success" type="submit"><i class="bi bi-search"></i></button>
-            </form>
         </div>
     </div>
 </nav>
@@ -70,10 +74,6 @@
     {% block content %} {% endblock %}
 </div>
 
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-        crossorigin="anonymous"></script>
 
 </body>
 
