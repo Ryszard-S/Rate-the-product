@@ -127,20 +127,18 @@ a {
 }
 
 .navbar-nav-toggle {
-  position: absolute;
+  position: fixed;
+  top:15px;
+  right:20px;
   display: flex;
   flex-direction: column;
   width: inherit;
-  transform: translateX(-100%) translateY(40%);
   padding: 12px;
-  background: rgba(255, 255, 255, 0.95 );
+  background: rgba(255, 255, 255, 0.35 );
   border: 1px solid #EE9344;
   box-shadow: $shadow_violet;
   border-radius: 24px;
   backdrop-filter: blur(24px);
-  & > * {
-    background: inherit;
-  }
 }
 
 

@@ -4,49 +4,54 @@
           href="{{ url_for('static', filename='assets/css/search.css') }}"> {% endblock %}
 {% block title %}Products{% endblock %}
 {% block content %}
-    <h3>Products</h3>
 
-    <div class="search-results">
-        {% for product in products.items %}
-            <div class="card">
+    <div class="products">
+        <h3>Products</h3>
 
-                {% if product[6] %}
+        <div class="search-results">
+            {% for product in products.items %}
+                <div class="card">
 
-                    <img class="card-img" src="{{ product[3] }}" alt="Card image cap">
-                {% else %}
-                    <img class="card-img" src="/static/assets/img/product_photo/{{ product[3] }}" alt="Card image cap">
-                {% endif %}
-                <div class="card-body">
-                    <h5 class="card-title">{{ product[1] }}, {{ product[2] }}</h5>
-                    <p class="card-text">{{ product[5] }}</p>
-                    <a href="{{ url_for('views.product',id_product=product[4]) }}" class="btn btn-outline-secondary">Pokaż
-                        więcej</a>
+                    {% if product[6] %}
+
+                        <img class="card-img" src="{{ product[3] }}" alt="Card image cap">
+                    {% else %}
+                        <img class="card-img" src="/static/assets/img/product_photo/{{ product[3] }}"
+                             alt="Card image cap">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product[1] }}, {{ product[2] }}</h5>
+                        <p class="card-text">{{ product[5] }}</p>
+                        <a href="{{ url_for('views.product',id_product=product[4]) }}"
+                           class="btn btn-outline-secondary">Pokaż
+                            więcej</a>
+                    </div>
                 </div>
-            </div>
-        {% endfor %}
-    </div>
-    <div class="p-1 text-center">
-        {% for page_num in products.iter_pages() %}
-            {% if page_num %}
-                {% if page == page_num %}
-                    <a class="btn btn-outline-success"
-                       href="{{ url_for('views.search', page=page_num, q=q, per_page=per_page) }}">{{ page_num }}</a>
+            {% endfor %}
+        </div>
+        <div class="p-1 text-center">
+            {% for page_num in products.iter_pages() %}
+                {% if page_num %}
+                    {% if page == page_num %}
+                        <a class="btn btn-outline-success"
+                           href="{{ url_for('views.search', page=page_num, q=q, per_page=per_page) }}">{{ page_num }}</a>
+                    {% else %}
+                        <a class="btn btn-success"
+                           href="{{ url_for('views.search', page=page_num, q=q, per_page=per_page) }}">{{ page_num }}</a>
+                    {% endif %}
                 {% else %}
-                    <a class="btn btn-success"
-                       href="{{ url_for('views.search', page=page_num, q=q, per_page=per_page) }}">{{ page_num }}</a>
+                    ...
                 {% endif %}
-            {% else %}
-                ...
-            {% endif %}
-        {% endfor %}
-        <form id="pp" method="get">
-            <select id="per_page" name="per_page" form="pp">
-                <option value="6" {% if per_page == 6 %} selected {% endif %}>6</option>
-                <option value="12" {% if per_page == 12 %} selected {% endif %}>12</option>
-                <option value="24" {% if per_page == 24 %} selected {% endif %}>24</option>
-            </select>
-            <button type="submit">Sub</button>
-        </form>
+            {% endfor %}
+            <form id="pp" method="get">
+                <select id="per_page" name="per_page" form="pp">
+                    <option value="6" {% if per_page == 6 %} selected {% endif %}>6</option>
+                    <option value="12" {% if per_page == 12 %} selected {% endif %}>12</option>
+                    <option value="24" {% if per_page == 24 %} selected {% endif %}>24</option>
+                </select>
+                <button type="submit">Sub</button>
+            </form>
+        </div>
     </div>
     <script src="{{ url_for('static', filename='main.js') }}"></script>
 {% endblock %}
