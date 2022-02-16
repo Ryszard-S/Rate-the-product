@@ -1,0 +1,33 @@
+@import "config";
+
+%btn {
+  display: inline-block;
+  border-radius: 10px;
+  padding: 3px;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+
+  &:hover {
+    transform: scale(0.98);
+  }
+}
+
+.btn-black {
+  @extend %btn;
+  color: black;
+  border: 1px solid black;
+  font-size: 12px;
+
+  &:hover {
+    background-color: rgba($secondary-color, 0.3);
+  }
+}
+
+.btn-red {
+  @extend %btn;
+  color: black;
+  box-shadow: $shadow_red;
+  font-size: 12px;
+
+}

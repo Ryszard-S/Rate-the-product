@@ -23,7 +23,7 @@
                         <h5 class="card-title">{{ product[1] }}, {{ product[2] }}</h5>
                         <p class="card-text">{{ product[5] }}</p>
                         <a href="{{ url_for('views.product',id_product=product[4]) }}"
-                           class="btn btn-outline-secondary">Pokaż
+                           class="btn-black">Pokaż
                             więcej</a>
                     </div>
                 </div>
@@ -33,10 +33,10 @@
             {% for page_num in products.iter_pages() %}
                 {% if page_num %}
                     {% if page == page_num %}
-                        <a class="btn btn-outline-success"
+                        <a class="btn-black"
                            href="{{ url_for('views.search', page=page_num, q=q, per_page=per_page) }}">{{ page_num }}</a>
                     {% else %}
-                        <a class="btn btn-success"
+                        <a class="btn-black"
                            href="{{ url_for('views.search', page=page_num, q=q, per_page=per_page) }}">{{ page_num }}</a>
                     {% endif %}
                 {% else %}

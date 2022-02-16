@@ -106,6 +106,13 @@ a {
   flex-direction: column;
 }
 
+.d-flex{
+  display: flex;
+}
+.justify-content-between{
+  justify-content: space-between;
+}
+
 
 @media (max-width: 1130px) {
   .navbar-nav {

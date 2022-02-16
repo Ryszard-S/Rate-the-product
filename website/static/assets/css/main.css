@@ -90,6 +90,16 @@ a {
       -ms-flex-direction: column;
           flex-direction: column; }
 
+.d-flex {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex; }
+
+.justify-content-between {
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between; }
+
 @media (max-width: 1130px) {
   .navbar-nav {
     display: none; }
