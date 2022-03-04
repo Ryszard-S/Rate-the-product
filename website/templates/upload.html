@@ -2,86 +2,63 @@
 
 {% block content %}
 
-    <p>Click on the "Choose File" button to upload a file:</p>
+    <div class="container p-3 justify-content-center">
+        <form method="POST" enctype="multipart/form-data">
 
-    <form method="POST" enctype="multipart/form-data">
-
-        <div class="form-floating p-2">
-
-            <input
-                    type="text"
-                    class="form-control"
-                    id="name"
-                    name="name"
-                    placeholder="Nazwa produktu"
-            />
-            <label for="name">Nazwa produktu</label>
-        </div>
-
-        <div class="form-floating p-2">
-
-            <label for="brand">Producent</label>
-
-            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" id="brand"
-                    name="brand">
-                <option selected></option>
-                {% for brand in brands %}
-                    <option value="{{ brand.id }}">{{ brand.name }}</option>
-
-                {% endfor %}
-            </select>
-        </div>
-
-        <div class="form-floating p-2">
-
-            <input
-                    type="text"
-                    class="form-control"
-                    id="description"
-                    name="description"
-                    placeholder="Opis"
-            />
-            <label for="description">Opis</label>
-        </div>
-
-
-        <div class="form-floating p-2">
-
-            <input
-                    type="number"
-                    class="form-control"
-                    id="barcode"
-                    name="barcode"
-                    placeholder="kod kreskowy"
-            />
-            <label for="name">kod kreskowy</label>
-        </div>
-
-        <div class="form-floating p-2">
-
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"
-                       value="random" checked>
-                <label class="form-check-label" for="flexRadioDefault1">
-                    Losuj obrazek
-                </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" value="www">
-                <label class="form-check-label" for="flexRadioDefault2">
-                    Link do zdjęcia z internetu
-                </label>
+            <div class="col-4 m-auto">
+                <img src="../static/assets/img/Folder.svg"/>
             </div>
 
-            <input class="form-control" type="text" placeholder="www" aria-label="default input example" name="link"
-                   id="name">
+            <div class="col-sm-6 p-3 m-auto">
 
-        </div>
-        <div class="d-flex justify-content-around">
-            <button class="btn btn-primary" type="submit">Upload</button>
-            <button class="btn btn-primary" type="reset">Reset</button>
-        </div>
-    </form>
+                <div class="form-floating mb-3 upload-input-group">
+                    <input type="text" class="form-control" name="name" id="name" placeholder="Nazwa produktu"
+                           required/>
+                    <label for="floatingInput">Nazwa produktu</label>
+                </div>
+
+                <div class="form-floating mb-3 upload-input-group">
+                    <select class="form-select" id="floatingSelect" name="brand"
+                            aria-label="Floating label select example" required>
+
+                        <option selected></option>
+                        {% for brand in brands %}
+                            <option value="{{ brand.id }}">{{ brand.name }}</option>
+
+                        {% endfor %}
+                    </select>
+
+                    <label for="floatingSelect">Producent</label>
+                </div>
+
+                <div class="form-floating mb-3 upload-input-group">
+                    <textarea type="text" class="form-control" id="description" name="description"
+                              placeholder="Opis" required></textarea>
+                    <label for="description">Opis</label>
+                </div>
+
+
+                <div class="form-floating mb-3 upload-input-group">
+                    <input type="number" class="form-control" id="barcode" name="barcode" placeholder="kod kreskowy"/>
+                    <label for="name">kod kreskowy</label>
+                </div>
+
+                <div class="input-group mb-3 upload-input-group">
+                    <label class="input-group-text" for="upload">Zdjęcie</label>
+                    <input type="file" accept=".png, .jpg, .jpeg" class="form-control" id="upload" name="upload"
+                           placeholder="załącz zdjęcie">
+
+                </div>
+
+                <div class="d-flex justify-content-around">
+                    <button class="btn btn-outline-success" type="submit">Upload</button>
+                    <button class="btn btn-outline-danger" type="reset">Reset</button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+
 
 
 {% endblock %}

@@ -1,2 +1,52 @@
 {% extends "base.html" %}
 {% block title %} Rate the product {% endblock %}
+
+{% block content %}
+
+    <div class="container">
+      <div class="row my-sm-3">
+        <div class="col-sm-3 d-none d-sm-block">
+          <img class="image-home" src="../static/assets/img/brand-reputation.svg" alt="" />
+        </div>
+        <div class="col-sm-6 align-self-end">
+          <p class="fs-4 fw-bold text-center">Sprawdź opinie przed zakupem</p>
+        </div>
+        <div class="col-sm-3 p-5 d-none d-sm-block">
+          <img class="image-home" src="../static/assets/img/complain.svg" alt="" />
+        </div>
+      </div>
+      <div class="row justify-content-center my-3">
+        <div class="col-sm-6 p-md-4 p-lg-5">
+          <form class="d-flex search-main" action="/search">
+            <input
+              class="search-input form-control form-control-lg"
+              type="search"
+              placeholder="Search"
+              aria-label="Search"
+              name="query"
+            />
+            <button class="btn btn-outline-primary btn-lg" type="submit">
+              <img
+                src="../static/assets/img/icons/search.svg"
+                alt="search"
+              />
+            </button>
+          </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-3 my-3">
+          <img class="image-home" src="../static/assets/img/giving-a-feedback.svg" alt="" />
+        </div>
+        <div class="col-sm-6 align-self-center my-3">
+          <p class="fs-5 text-center">
+            Podziel się swoją opinią na temat produktów dostępnych w popularnych
+            sieciach handlowych. Zobacz opinie innych kupujących, czy warto
+            kupić dany produkt i nie daj się naciąć.
+          </p>
+        </div>
+        <div class="col-sm"></div>
+      </div>
+    </div>
+
+{% endblock %}

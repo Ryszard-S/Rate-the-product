@@ -1,38 +1,29 @@
 {% extends "base.html" %} {% block title %}Sign Up{% endblock %} {% block
     content %}
-<div class="container-lg">
-    <form method="POST" style="max-width:480px; margin:auto;">
-      <h3 class="d-flex justify-content-center">Sign Up</h3>
-        
-      <div class="form-floating">
+    <div class="container-lg">
 
-        <input
-          type="email"
-          class="form-control"
-          id="email"
-          name="email"
-          placeholder="Enter email"
-        />
-          <label for="email">Adres email</label>
-      </div>
+        <div class="container p-3 justify-content-center">
+            <div class="col-4 p-3 m-auto">
+                <img class="image-home" src="../static/assets/img/login-in-violet.svg" alt=""/>
+            </div>
+            <div class="col-sm-6 p-3 m-auto">
+                <form method="post">
+                    <div class="input-group mb-2 login-input-group">
+                        <span class="input-group-text"> <i class="bi bi-envelope"></i> </span>
+                        <input class="form-control" type="email" id="email" name="email" placeholder="E-mail"/>
+                    </div>
+                    <div class="input-group mb-2 login-input-group">
+                        <span class="input-group-text"> <i class="bi bi-key"></i> </span>
+                        <input class="form-control" type="password" id="password1" name="password1"
+                               placeholder="Password"/>
+                    </div>
+                    <button class="btn btn-outline-success me-auto" type="submit">
+                        Login
+                    </button>
+                </form>
+            </div>
+        </div>
 
-      <div class="form-floating">
-
-        <input
-          type="password"
-          class="form-control"
-          id="password1"
-          name="password1"
-          placeholder="Enter password"
-        />
-           <label for="password1">Hasło</label>
-      </div>
-
-      <br />
-      <button type="submit" class="btn btn-primary">Submit</button>
-      
-    </form>
-
-</div>
-    {% endblock %}
+    </div>
+{% endblock %}
     

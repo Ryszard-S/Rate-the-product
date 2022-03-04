@@ -1,29 +1,55 @@
 {% extends "base.html" %} {% block title %}Products{% endblock %} {% block content %}
 
+    <div class="container p-3">
+        <table class="table m-3">
+            <thead>
+            <tr>
 
-    <table class="table">
-        <thead>
-        <tr>
+                <th scope="col">Imię</th>
+                <th scope="col">Nick</th>
+                <th scope="col">Email</th>
+                <th scope="col">Data rejestracji</th>
+                <th scope="col">Jesteś już nami od:</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{ info.name }}</td>
+                <td>{{ info.nick }}</td>
+                <td>{{ info.email }}</td>
+                <td>{{ info.data_rejestracji.strftime('%Y-%m-%d') }}</td>
+                <td>{{ czas }} dni</td>
+            </tr>
+            </tbody>
+        </table>
+        <p>Dodane produkty:</p>
 
-            <th scope="col">Imię</th>
-            <th scope="col">Nick</th>
-            <th scope="col">Email</th>
-            <th scope="col">Data rejestracji</th>
-            <th scope="col">Jesteś już nami od:</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-{#            <th scope="row"></th>#}
-            <td>{{ info.name }}</td>
-            <td>{{ info.nick }}</td>
-            <td>{{ info.email }}</td>
-            <td>{{ info.data_rejestracji }}</td>
-            <td>{{ czas }} dni</td>
-        </tr>
-        </tbody>
-    </table>
-
-
+    <div class="overflow-auto" style="height: 100px">
+        <table class="table m-3=">
+            <thead>
+            <tr>
+                <th scope="col">Zdjecie</th>
+                <th scope="col">Producent</th>
+                <th scope="col">Nazwa</th>
+                <th scope="col">Data dodania</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for product in products %}
+                <tr>
+                    {% if product[0] %}
+                        <td><img src="{{ product[0] }}" height="50px"/></td>
+                    {% else %}
+                        <td><img src="../static/assets/img/product_photo/Default.svg" height="25px"/></td>
+                    {% endif %}
+                    <td>{{ product[1] }}</td>
+                    <td>{{ product[2] }}</td>
+                    <td>{{ product[3].strftime('%Y-%m-%d') }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 
 {% endblock %}

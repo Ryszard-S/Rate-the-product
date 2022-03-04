@@ -1,14 +1,14 @@
-import os
+import io
 import uuid
-from random import choice
-
-from flask import Blueprint, render_template, request, flash, redirect, current_app, url_for
-from flask_login import current_user, login_required
-from werkzeug.utils import secure_filename
 from datetime import datetime
 
+from flask import Blueprint, render_template, request, flash, redirect, current_app, url_for, abort
+from flask_login import current_user, login_required
+from sqlalchemy import or_
+
 from .extenctions import db
-from .models import Products, Brand, Comments, Login
+from .models import Products, Brand, Comments, ProductPhotos, User
+from filestack import Client
 
 views = Blueprint('views', __name__)
 
@@ -22,16 +22,11 @@ def home():
 @login_required
 def my_products():
     page = request.args.get('page', 1, type=int)
-    prod = Products.query.filter_by(id_user=current_user.get_id()).paginate(page=page, per_page=12)
-    prodd = Products.query.filter_by(id_user=current_user.get_id()).join(Brand,
-                                                                         Products.id_brand == Brand.id).add_columns(
-        Products.name, Products.description,
-        Brand.name).paginate(page=page,
-                             per_page=12)
-    proddd = Products.query.join(Brand, Products.id_brand == Brand.id).add_columns(Products.name, Products.description,
-                                                                                   Brand.name)
+    products = Products.query.filter_by(id_user=current_user.get_id()).join(Brand,
+                                                                            Products.id_brand == Brand.id).add_columns(
+        Products.name, Products.description, Brand.name).paginate(page=page, per_page=12)
 
-    return render_template("my_products.html", user=current_user, products=prodd, page=page)
+    return render_template("my_products.html", user=current_user, products=products, page=page)
 
 
 @views.route("/upload", methods=['GET', 'POST'])
@@ -39,60 +34,51 @@ def my_products():
 def upload():
     brands = Brand.query.all()
     if request.method == 'POST':
-        option = request.form.get('flexRadioDefault')
         name_product = request.form.get('name')
         brand = request.form.get('brand')
         description = request.form.get('description')
         barcode = request.form.get('barcode')
+        image = request.files['upload']
 
-        if option == 'random':
-            filename = choice(current_app.config['IMAGES'])
-            product = Products(name=name_product, id_brand=brand, description=description, photo=filename,
-                               barcode=barcode, id_user=current_user.get_id(), website=False)
-            db.session.add(product)
-            db.session.commit()
-            flash("Product added", 'message')
+        product = Products(name=name_product, id_brand=brand, description=description, id_user=current_user.get_id(),
+                           barcode=barcode)
+        db.session.add(product)
+        db.session.commit()
 
-        elif option == 'www':
-            link = request.form.get('link')
-            if allowed_file(link):
-                product = Products(name=name_product, id_brand=brand, description=description, photo=link,
-                                   barcode=barcode, id_user=current_user.get_id(), website=True)
-                db.session.add(product)
-                db.session.commit()
-                flash("Product added", 'message')
-            else:
-                flash("niepoprawny link", 'error')
-
-        if 'image' not in request.files:
-            flash('No file part')
-        if request.files:
-            image = request.files['image']
-            name_product = request.form.get('name')
-            brand = request.form.get('brand')
-            description = request.form.get('description')
-            barcode = request.form.get('barcode')
+        if image:
             if image.filename == '':
                 flash('Choose file', 'error')
                 return redirect(request.url)
 
-            if not allowed_file(image.filename):
+            elif not allowed_file(image.filename):
                 flash("Bad filename extencions!", 'error')
                 return redirect(request.url)
 
             else:
-                filename = secure_filename(image.filename)
-                ext = image.content_type.split('/')[1]
+
+                ext = image.mimetype.split('/')[1]
                 name = str(uuid.uuid4())
                 filename = name + "." + ext
-                image.save(os.path.join(current_app.config['IMAGE_UPLOADS'], filename))
-                product = Products(name=name_product, id_brand=brand, description=description, photo=filename,
-                                   barcode=barcode, id_user=current_user.get_id())
-                db.session.add(product)
+                store_params = {
+                    "filename": filename,
+                    "mimetype": image.mimetype
+                }
+                client = Client(current_app.config['IMAGE_UPLOAD_API'])
+                file = client.upload(file_obj=io.BytesIO(image.read()), store_params=store_params)
+                photo = ProductPhotos(id_user=current_user.get_id(), id_product=product.id, photo=file.url,
+                                      file_name=filename)
+                product.photo = file.url
+                db.session.add(photo, product)
+
                 db.session.commit()
                 flash("Product added", 'message')
 
-    return render_template("upload.html", user=current_user, brands=brands)
+        else:
+            db.session.add(product)
+            db.session.commit()
+            flash("Product added without photo", 'message')
+
+    return render_template("upload.html", brands=brands)
 
 
 @views.route("/search", methods=['GET'])
@@ -100,48 +86,44 @@ def search():
     query = request.args.get('query')
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 12, type=int)
+    sort = request.args.get('sort')
+    sub = None
+    if sort == 'rate_asc':
+        sub = Products.rating.asc()
+    elif sort == 'rate_desc':
+        sub = Products.rating.desc()
+    elif sort == 'alfa_asc':
+        sub = Products.name.asc()
+    elif sort == 'alfa_desc':
+        sub = Products.name.desc()
+    elif sort == 'date_asc':
+        sub = Products.date.asc()
+    elif sort == 'date_desc':
+        sub = Products.date.desc()
 
-    if query:
-        product = Products.query.join(Brand, Products.id_brand == Brand.id).add_columns(Brand.name,
-                                                                                        Products.name,
-                                                                                        Products.photo,
-                                                                                        Products.id,
-                                                                                        Products.rating,
-                                                                                        Products.website).filter(
-            Products.name.contains(query)).paginate(
-            page=page, per_page=per_page)
-    else:
+    product = db.session.query(Brand.name,
+                               Products.name,
+                               Products.id,
+                               Products.rating,
+                               Products.photo
+                               ).select_from(Products).join(Brand).filter(
+        or_(Products.name.ilike(f'%{query}%'), Products.description.ilike(f'%{query}%'))).order_by(sub).paginate(
+        page=page, per_page=per_page)
 
-        product = Products.query.join(Brand, Products.id_brand == Brand.id).add_columns(Brand.name,
-                                                                                        Products.name,
-                                                                                        Products.photo,
-                                                                                        Products.id,
-                                                                                        Products.rating,
-                                                                                        Products.website).paginate(
-            page=page, per_page=per_page)
-    return render_template("search.html", products=product, user=current_user, page=page, query=query, per_page=per_page)
+    return render_template("search.html", products=product, page=page, query=query,
+                           per_page=per_page, sort=sort)
 
 
 @views.route('/product/<int:id_product>', methods=["GET", "POST"])
 def product(id_product):
     product = Products.query.filter_by(id=id_product).join(Brand, Products.id_brand == Brand.id).add_columns(
-        Products.name,
-        Products.rating,
-        Products.date,
-        Products.photo,
-        Products.description,
-        Products.barcode,
         Brand.name,
-        Products.id,
-        Products.website).first_or_404()
+        Products.id).first_or_404()
 
-    comments = Comments.query.filter_by(id_product=id_product).join(Login, Comments.id_user == Login.id).add_columns(
-        Login.nick,
-        Comments.comment,
-        Comments.rating,
-        Comments.date,
-        Comments.id,
-        Comments.id_user)
+    comments = Comments.query.filter_by(id_product=id_product).join(User, Comments.id_user == User.id).add_columns(
+        User.nick).all()
+
+    photos = ProductPhotos.query.filter_by(id_product=id_product).all()
 
     comment_added = False
     if current_user.is_authenticated:
@@ -150,18 +132,21 @@ def product(id_product):
             comment_added = True
 
     if request.method == "POST" and not comment_added:
-        stars = request.form.get("stars")
+        stars = request.form.get("rate")
         comment = request.form.get("comment")
-        comm = Comments(id_user=current_user.get_id(),
-                        id_product=id_product,
-                        comment=comment,
-                        rating=stars)
-        db.session.add(comm)
-        db.session.commit()
+        if stars and comment:
+            new_comment = Comments(id_user=current_user.get_id(),
+                                   id_product=id_product,
+                                   comment=comment,
+                                   rating=stars)
+            db.session.add(new_comment)
+            db.session.commit()
+        else:
+            flash('Wypełnij obowiązkowe pola', 'error')
         return redirect(url_for("views.product", id_product=id_product))
 
     return render_template("product.html", user=current_user, product=product, comments=comments,
-                           comment_added=comment_added, str=str)
+                           comment_added=comment_added, photos=photos, str=str)
 
 
 @views.route("/delete/<int:id_comment>/<int:id_user>/<int:id_product>", methods=["GET", "POST"])
@@ -178,11 +163,16 @@ def delete(id_user, id_comment, id_product):
 
 
 @views.route("/user/<string:id_user>", methods=["GET", "POST"])
+@login_required
 def user(id_user):
-    if current_user.is_authenticated and id_user == current_user.get_id():
-        x: Login = Login.query.filter_by(id=id_user).first_or_404()
-        dni = (datetime.now() - x.data_rejestracji).days
-    return render_template("user.html", user=current_user, info=x, czas=dni)
+    if current_user.is_authenticated and current_user.get_id() == str(id_user):
+        info: User = User.query.filter_by(id=id_user).first_or_404()
+        dni = (datetime.now() - info.data_rejestracji).days
+        products_added = db.session.query(Products.photo, Brand.name, Products.name, Products.date).join(Brand).filter(
+            Products.id_user == id_user)
+    else:
+        abort(403)
+    return render_template("user.html", user=current_user, info=info, czas=dni, products=products_added)
 
 
 def allowed_file(filename):
@@ -191,7 +181,7 @@ def allowed_file(filename):
 
     ext = filename.rsplit('.')[-1]
 
-    if ext.upper() in current_app.config['ALLOWED_FILE_EXTENTIONS']:
+    if ext.lower() in current_app.config['IMAGE_EXTENSIONS']:
         return True
     else:
         return False
