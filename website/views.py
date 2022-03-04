@@ -41,7 +41,7 @@ def upload():
         image = request.files['upload']
 
         product = Products(name=name_product, id_brand=brand, description=description, id_user=current_user.get_id(),
-                           barcode=barcode)
+                           barcode=barcode, rating=0)
         db.session.add(product)
         db.session.commit()
 
