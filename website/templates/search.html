@@ -81,27 +81,32 @@
 
 
         </div>
-        <div class="p-1 text-center">
+        <div class="p-1">
+
+        <nav class="d-flex justify-content-center" aria-label="Page navigation example">
+            <ul class="pagination">
             {% for page_num in products.iter_pages() %}
                 {% if page_num %}
                     {% if page == page_num %}
-                        <a class="btn-black"
-                           href="{{ url_for('views.search', page=page_num, query=query, per_page=per_page, sort=sort) }}">{{ page_num }}</a>
+                        <li class="page-item active"><a class="page-link" href="{{ url_for('views.search', page=page_num, query=query, per_page=per_page, sort=sort) }}">{{ page_num }}</a></li>
                     {% else %}
-                        <a class="btn-black"
-                           href="{{ url_for('views.search', page=page_num, query=query, per_page=per_page, sort=sort) }}">{{ page_num }}</a>
+                        <li class="page-item"><a class="page-link" href="{{ url_for('views.search', page=page_num, query=query, per_page=per_page, sort=sort) }}">{{ page_num }}</a></li>
                     {% endif %}
                 {% else %}
                     ...
                 {% endif %}
             {% endfor %}
-            <form id="pp" method="get">
-                <select id="per_page" name="per_page" form="pp">
+            </ul>
+        </nav>
+
+
+            <form class="d-flex justify-content-center" id="pp" method="get">
+                <select class="" id="per_page" name="per_page" form="pp">
                     <option value="6" {% if per_page == 6 %} selected {% endif %}>6</option>
                     <option value="12" {% if per_page == 12 %} selected {% endif %}>12</option>
                     <option value="24" {% if per_page == 24 %} selected {% endif %}>24</option>
                 </select>
-                <button type="submit">Sub</button>
+                <button class="btn btn-outline-primary ms-2" type="submit">Sub</button>
             </form>
         </div>
     </div>

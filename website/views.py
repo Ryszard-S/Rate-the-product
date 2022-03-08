@@ -83,7 +83,7 @@ def upload():
 
 @views.route("/search", methods=['GET'])
 def search():
-    query = request.args.get('query')
+    query = request.args.get('query', '')
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 12, type=int)
     sort = request.args.get('sort')
