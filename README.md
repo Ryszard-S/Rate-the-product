@@ -4,7 +4,11 @@
 
 ### Technology used:
 
-1. Flask - python
+1. Python:
+
+    - Flask
+    - SQL Alchemy
+
 
 2. PostgreSQL - database
 
