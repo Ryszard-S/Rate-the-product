@@ -241,3 +241,4 @@ modules.xml
 # End of https://www.toptal.com/developers/gitignore/api/flask,pycharm+all
 
 /**/node_modules/
+.DS_Store
