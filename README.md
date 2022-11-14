@@ -19,3 +19,11 @@
 5. Filestack - to store uploaded images. 
 
 6. Heroku - hosting website 
+
+---
+
+### Dev:
+1. watch css files:
+    - npm install -g gulp-cli
+    - cd ./website/static/assets
+    - npm run dev
