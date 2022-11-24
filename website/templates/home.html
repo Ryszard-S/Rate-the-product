@@ -47,6 +47,37 @@
         </div>
         <div class="col-sm"></div>
       </div>
+      <div class="row row-cols-2 mt-5">
+        
+        {% for product in products %}
+        <div class="card mb-4 justify-content-between" style="width: 18rem">
+            {% if product.photo %}
+                <img
+                        src="{{ product.photo }}"
+                        class="card-img-top ratio ratio-1x1"
+                        alt="Card image cap"
+                />
+            {% else %}
+                <img
+                        src="../static/assets/img/product_photo/Default.svg"
+                        class="card-img-top m-auto"
+                        alt="Card image cap"
+                        width="100px"
+                        height="100px"
+                />
+            {% endif %}
+            <div class="card-body flex-grow-0">
+                <h5 class="card-title"> {{ product.name }}</h5>
+                <p class="card-text">
+                    {{ product.rating }}
+                </p>
+                <a href="{{ url_for('views.product', id_product=product.id) }}" class="btn btn-sm btn-primary">Show
+                    more</a>
+            </div>
+        </div>
+    {% endfor %}
+
+      </div>
     </div>
 
 {% endblock %}

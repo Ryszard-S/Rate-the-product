@@ -22,8 +22,19 @@
 
 ---
 
+
 ### Dev:
 1. watch css files:
-    - npm install -g gulp-cli
-    - cd ./website/static/assets
-    - npm run dev
+``` bash
+    npm install -g gulp-cli
+
+    cd ./website/static/assets
+
+    npm run dev
+```
+
+2. run flask app
+
+``` bash 
+flask run
+```

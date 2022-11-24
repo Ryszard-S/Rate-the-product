@@ -9,13 +9,15 @@ from sqlalchemy import or_
 from .extenctions import db
 from .models import Products, Brand, Comments, ProductPhotos, User
 from filestack import Client
+from sqlalchemy.sql.expression import func
 
 views = Blueprint('views', __name__)
 
 
-@views.route('/', methods=['GET', 'POST'])
+@views.route('/', methods=['GET'])
 def home():
-    return render_template("home.html", user=current_user)
+    products = Products.query.order_by(func.random()).limit(6).all()
+    return render_template("home.html", user=current_user, products=products)
 
 
 @views.route("/my_products", methods=['GET', 'POST'])
