@@ -4,35 +4,27 @@ const sass = require('gulp-sass')(require('node-sass'));
 const autoprefixer = require('gulp-autoprefixer')
 const purgecss = require('gulp-purgecss')
 const paths = {
-    src_files: './scss/**/*.scss',
-    css_files: './scss/**/*.css',
+    scss_files: './scss/**/*.scss',
+    css_files: './css/**/*.css',
     src: './scss',
     dest: './css',
     html_files: '../../templates/**/*.html'
 }
 
 function style() {
-    return gulp.src('./scss/**/*.scss')
+    return gulp.src(paths.scss_files)
         .pipe(sass())
-.pipe(autoprefixer({overrideBrowserslist: ['last 4 version']}))
-        .pipe(gulp.dest('css'))
+        .pipe(autoprefixer({overrideBrowserslist: ['last 4 version']}))
+        // .pipe(gulp.dest('css'))
         .pipe(purgecss({
-            content: ['../../templates/**/*.html']
+            content: [paths.html_files]
         }))
         .pipe(gulp.dest('purgecss'))
 
 }
 
-gulp.task('purgecss', () => {
-    return gulp.src('scss/**/*.css')
-        .pipe(purgecss({
-            content: ['../../templates/**/*.html']
-        }))
-        .pipe(gulp.dest('css'))
-})
-
 function watch() {
-    gulp.watch('./scss/**/*.scss', style);
+    gulp.watch([paths.scss_files, paths.html_files], style);
 }
 
 
