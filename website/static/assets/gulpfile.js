@@ -1,8 +1,10 @@
 const browserSync = require('browser-sync').create();
 const gulp = require('gulp');
 const sass = require('gulp-sass')(require('node-sass'));
-const autoprefixer = require('gulp-autoprefixer')
-const purgecss = require('gulp-purgecss')
+const autoprefixer = require('gulp-autoprefixer');
+const purgecss = require('gulp-purgecss');
+const cleanCSS = require('gulp-clean-css');
+
 const paths = {
     scss_files: './scss/**/*.scss',
     css_files: './css/**/*.css',
@@ -19,6 +21,7 @@ function style() {
         .pipe(purgecss({
             content: [paths.html_files]
         }))
+        .pipe(cleanCSS())
         .pipe(gulp.dest('purgecss'))
 
 }
