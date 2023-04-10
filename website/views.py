@@ -16,7 +16,8 @@ views = Blueprint('views', __name__)
 
 @views.route('/', methods=['GET'])
 def home():
-    products = Products.query.order_by(func.random()).limit(6).all()
+    products = Products.query.order_by(func.random()).limit(10).all()
+    products = [products[i:i + 3] for i in range(0, len(products), 3)]
     return render_template("home.html", user=current_user, products=products)
 
 
