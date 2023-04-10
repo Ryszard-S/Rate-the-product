@@ -25,5 +25,8 @@ def create_app(config_file='settings.py'):
     @login_manager.user_loader
     def load_user(id):
         return User.query.get(int(id))
+    
+    with app.app_context():
+        from .filters import filters
 
     return app
