@@ -1,0 +1,29 @@
+{
+  "name": "rate-the-product",
+  "version": "1.0.0",
+  "description": "[Rate the product](https://rate-the-product.herokuapp.com/)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
+    "bootstrap": "^5.2.3",
+    "bootstrap-icons": "^1.10.4",
+    "browser-sync": "^2.29.1",
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^8.0.0",
+    "gulp-clean-css": "^4.3.0",
+    "gulp-purgecss": "^5.0.0",
+    "gulp-sass": "^5.1.0",
+    "gulp-sourcemaps": "^3.0.0",
+    "node-sass": "^8.0.0",
+    "prettier": "^2.8.7",
+    "prettier-plugin-jinja-template": "^0.2.0",
+    "purgecss": "^5.0.0",
+    "sass": "^1.61.0"
+  }
+}
