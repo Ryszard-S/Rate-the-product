@@ -1,6 +1,6 @@
 # Rate the product - website
 
-[Rate the product](https://rate-the-product.herokuapp.com/)
+[Rate the product](https://rate-the-product.onrender.com)
 
 ### Technology used:
 

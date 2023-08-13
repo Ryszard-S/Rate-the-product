@@ -1,0 +1,78 @@
+{% extends "base.html" %} {% block title %} Rate the product {% endblock %} {%
+block content %}
+<div class="row" style="height: 333px">asd</div>
+<!-- data-bs-ride="carousel" -->
+<div class="container">
+  <div id="carouselRecommenedProducts" class="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <div class="card-group">
+          {% for product in products[0] %}
+          <div class="card border-violet-card" style="max-width: 18rem">
+            <div class="ratio ratio-4x3">
+              <img
+                src="{{ product.photo | image_url }}"
+                crossorigin="anonymous"
+              />
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">{{product.name}}</h5>
+              <p class="card-text">{{product.rating}}</p>
+              <a href="#" class="btn btn-primary">Idź do produktu</a>
+            </div>
+          </div>
+          {%endfor%}
+        </div>
+      </div>
+
+      {% for products_arr in products[1:] %}
+      <div class="carousel-item">
+        <div class="card-group">
+          {% for product in products_arr %}
+          <div class="card border-violet-card" style="max-width: 18rem">
+            <div class="ratio ratio-4x3">
+              <img
+                src="{{ product.photo | image_url }}"
+                class="card-img-top"
+                crossorigin="anonymous"
+                loading="lazy"
+              />
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">{{product.name}}</h5>
+              <p class="card-text">{{product.rating}}</p>
+              <a href="#" class="btn btn-primary">Idź do produktu</a>
+            </div>
+          </div>
+
+          {%endfor%}
+        </div>
+      </div>
+      {%endfor%}
+    </div>
+    <button
+      class="carousel-control-prev"
+      type="button"
+      data-bs-target="#carouselRecommenedProducts"
+      data-bs-slide="prev"
+    >
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button
+      class="carousel-control-next"
+      type="button"
+      data-bs-target="#carouselRecommenedProducts"
+      data-bs-slide="next"
+    >
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
+<script src="{{ url_for('static', filename='main.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/js/get-color.js') }}"></script>
+{% endblock %}
+  
